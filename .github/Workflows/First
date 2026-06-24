@@ -6,5 +6,5 @@ on: push
       runs-on: ubuntu-latest
       steps:
         - name: Print a welcome message
-          runs: echo "Hello From The First Workflow"      
+          run: echo "Hello From The First Workflow"      
 
