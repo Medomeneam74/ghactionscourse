@@ -1,0 +1,8 @@
+name: My first workflow
+on: push
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print welcome message
+        run: echo "Hello in the first workflow!"
