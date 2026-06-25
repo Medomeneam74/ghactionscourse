@@ -11,4 +11,4 @@ jobs:
     - name: build image
       run: docker build -t backend-app:latest .
     - name: verify images exists
-      uses: docker images
+      run: docker images
