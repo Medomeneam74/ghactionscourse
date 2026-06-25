@@ -1,0 +1,9 @@
+name: my first
+on: push
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print hello message
+        run: echo "Hello Message"
+        
