@@ -1,0 +1,14 @@
+name: build docker image
+on: 
+  push:
+    branches: main
+jobs:
+  build-end-verify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout the code
+      uses: actions/checkout@v4
+    - name: build image
+      uses: docker build -t backend-app:latest .
+    - name: verify images exists
+      uses: docker images
