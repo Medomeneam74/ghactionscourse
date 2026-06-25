@@ -17,14 +17,17 @@ jobs:
           docker push ${{secrets.DOCKER_USERNAME}}/backend-app:latest
   deploy:
     needs: build-and-push
-    uses: appleboy/ssh-action@v1.0.3
-    with:
-      host: ${{secrets.SERVER_HOST}}
-      username: ${{secrets.SERVER_USERNAME}}
-      key: ${{secrets.SERVER_PRIVATE_KEY}}
-      script: |
-        docker pull ${{secrets.DOCKER_USERNAME}}/backend-app:latest
-        docker stop my-running-apps || true
-        docker rm my-running-apps || true
-        docker run -d --name my-running-app -p 80:3000 $${{secrets.DOCKER_USERNAME}}/backend-app:latest
+    runs-on: ubuntu-latest
+    steps: 
+      - name: deploy via ssh
+        uses: invi5H/ssh-action@v1.0.0
+        with:
+          SSH_HOST: ${{secrets.SERVER_HOST}}
+          SSH_USERNAME: ${{secrets.SERVER_USERNAME}}
+          SSH_KEY: ${{secrets.SERVER_PRIVATE_KEY}}
+          script: |
+            docker pull ${{secrets.DOCKER_USERNAME}}/backend-app:latest
+            docker stop my-running-apps || true
+            docker rm my-running-apps || true
+            docker run -d --name my-running-app -p 80:3000 $${{secrets.DOCKER_USERNAME}}/backend-app:latest
         
