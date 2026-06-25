@@ -1,0 +1,32 @@
+name: build,push and deploy
+on: 
+  push:
+    branches: main 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses:checkout/checkout@v4
+
+    - name: Docker-login
+      run: echo"${{secrets.DOCKER_PASSWORD}}" | docker login -u "${{secrets.DOCKER_USERNAME}}" --password-stdin
+    - name: buid-and-push
+      run: |
+          docker build -t ${{secrets.DOCKER_USERNAME}}/backend-app:latest .
+          docker push ${{secrets.DOCKER_USERNAME}}/backend-app:latest
+  deploy:
+    needs: build-and-push
+    uses: appleboy/ssh-action@v1.0.3
+    with:
+      host: ${{secrets.SERVER_HOST}}
+      username: ${{secrets.SERVER_USERNAME}}
+      key: ${{secrets.SERVER_PRIVATE_KEY}}
+
+      script: |
+        docker pull ${{secrets.DOCKER_USERNAME}}/backend-app:latest
+        docker stop my-running-apps || true
+        docker rm my-running-apps || true
+        docker run -d --name my-running-app -p 80:3000 $${{secrets.DOCKER_USERNAME}}/backend-app:latest
+        
