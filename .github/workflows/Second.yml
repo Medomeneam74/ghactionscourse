@@ -9,6 +9,6 @@ jobs:
     - name: checkout the code
       uses: actions/checkout@v4
     - name: build image
-      uses: docker build -t backend-app:latest .
+      run: docker build -t backend-app:latest .
     - name: verify images exists
       uses: docker images
