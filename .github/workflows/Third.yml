@@ -26,8 +26,8 @@ jobs:
           SSH_USER: ${{secrets.SERVER_USERNAME}}
           SSH_KEY: ${{secrets.SERVER_PRIVATE_KEY}}
           script: |
-            docker pull ${{secrets.DOCKER_USERNAME}}/backend-app:latest
-            docker stop my-running-apps || true
-            docker rm my-running-apps || true
-            docker run -d --name my-running-app -p 80:3000 $${{secrets.DOCKER_USERNAME}}/backend-app:latest
+            sudo docker pull ${{secrets.DOCKER_USERNAME}}/backend-app:latest
+            sudo docker stop my-running-apps || true
+            sudo docker rm my-running-apps || true
+            sudo docker run -d --name my-running-app -p 80:3000 $${{secrets.DOCKER_USERNAME}}/backend-app:latest
         
