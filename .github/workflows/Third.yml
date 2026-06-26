@@ -18,7 +18,15 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-    steps: 
+    steps:
+      - name: Check if Secret is Empty
+        run: |
+          if [ -z "${{ secrets.SERVER_PRIVATE_KEY }}" ]; then
+            echo "Error: The secret SERVER_PRIVATE_KEY is EMPTY! GitHub cannot see it."
+            exit 1
+          else
+            echo "Success: The secret is loaded and visible to GitHub."
+          fi
       - name: deploy via ssh
         uses: appleboy/ssh-action@master
         with:
