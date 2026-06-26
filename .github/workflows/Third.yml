@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout code
-      uses: actions/checkout@v7
+      uses: actions/checkout@v4
     - name: Dockerhub login in 
       run: echo "${{secrets.DOCKER_PASSWORD}}" | docker login -u "${{secrets.DOCKER_USERNAME}}" --password-stdin
     - name: buid-and-push
@@ -20,14 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: deploy via ssh
-        uses: invi5H/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@master
         with:
-          SSH_HOST: ${{secrets.SERVER_HOST}}
-          SSH_USER: ${{secrets.SERVER_USERNAME}}
-          SSH_KEY: ${{secrets.SERVER_PRIVATE_KEY}}
+          host: ${{secrets.SERVER_HOST}}
+          username: ${{secrets.SERVER_USERNAME}}
+          key: ${{secrets.SERVER_PRIVATE_KEY}}
           script: |
             sudo docker pull ${{secrets.DOCKER_USERNAME}}/backend-app:latest
             sudo docker stop my-running-apps || true
             sudo docker rm my-running-apps || true
-            sudo docker run -d --name my-running-app -p 80:3000 $${{secrets.DOCKER_USERNAME}}/backend-app:latest
+            sudo docker run -d --name my-running-apps -p 80:3000 ${{secrets.DOCKER_USERNAME}}/backend-app:latest
         
